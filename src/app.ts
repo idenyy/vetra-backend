@@ -6,6 +6,8 @@ import cors from 'cors';
 
 import connectDB from './config/db.js';
 import authRoute from './routes/auth.route.js';
+import userRoute from './routes/user.route.js';
+import messageRoute from './routes/chat.route.js';
 
 dotenv.config();
 
@@ -29,5 +31,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
+app.use('/api/message', messageRoute);
 
 export default app;

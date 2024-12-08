@@ -86,7 +86,7 @@ export const signupVerify = async (req: Request, res: Response): Promise<any> =>
       });
     }
   } catch (error: any) {
-    console.error(`Error in [signupComplete]: ${error.message}`);
+    console.error(`Error in [signup verify]: ${error.message}`);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -136,7 +136,7 @@ export const checkAuth = async (req: Request, res: Response): Promise<any> => {
   try {
     return res.status(200).json(req.user);
   } catch (error: any) {
-    console.error(`Error in [authCheck] controller: ${error.message}`);
+    console.error(`Error in [checkAuth] controller: ${error.message}`);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };

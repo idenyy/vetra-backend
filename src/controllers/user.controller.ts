@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import User from '../models/user.model.js';
 import bcrypt from 'bcrypt';
 import { IUser } from '../types/user.type.js';
-import cloudinary from '../config/cloudinary';
+import cloudinary from '../config/cloudinary.js';
 
 export const getProfile = async (req: Request, res: Response): Promise<any> => {
   const userId = req.user?.id;
