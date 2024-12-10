@@ -3,8 +3,8 @@ import nodemailer from 'nodemailer';
 export const sendMail = async (email: string, verificationCode: string) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      host: 'smtp.gmail.com',
+      service: 'hotmail',
+      host: 'smtp.office365.com',
       port: 587,
       secure: false,
       auth: {
@@ -15,7 +15,7 @@ export const sendMail = async (email: string, verificationCode: string) => {
 
     const mailOptions = {
       from: {
-        name: 'Luxury Hotel',
+        name: 'Vetra',
         address: process.env.EMAIL_USER || ''
       },
       to: email,
@@ -46,9 +46,11 @@ export const sendMail = async (email: string, verificationCode: string) => {
             
             /* Header */
             .email-header {
+              width: 40px;
+              height: 40px;
               font-family: Georgia, 'Times New Roman', Times, serif;
               font-size: 18px;
-              color: #dba765;
+              color: #DC143C;
               text-align: left;
             }
             
@@ -87,7 +89,7 @@ export const sendMail = async (email: string, verificationCode: string) => {
         </head>
         <body>
           <div class="email-container">
-            <h1 class="email-header">LUXURY</h1>
+            <h1 class="email-header"><img src="https://static.thenounproject.com/png/7745-200.png" alt="Logo"></h1>
             <div class="email-body">
               <p>Hi there,</p>
               <p>This is your one time verification code.</p>
