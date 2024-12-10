@@ -32,6 +32,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
 
     res.cookie('signupData', token, {
       httpOnly: true,
+      partitioned: true,
       secure: true,
       sameSite: 'none',
       maxAge: 10 * 60 * 1000
