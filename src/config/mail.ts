@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer';
+import { config } from 'dotenv';
+
+config();
 
 export const sendMail = async (email: string, verificationCode: string) => {
   try {
