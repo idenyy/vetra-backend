@@ -6,8 +6,7 @@ config();
 export const sendMail = async (email: string, verificationCode: string) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'hotmail',
-      host: 'smtp.office365.com',
+      host: 'smtp.mail.me.com',
       port: 587,
       secure: false,
       auth: {
@@ -110,6 +109,7 @@ export const sendMail = async (email: string, verificationCode: string) => {
 
     await transporter.sendMail(mailOptions);
   } catch (error) {
+    console.log(process.env.EMAIL_USER, process.env.EMAIL_PASSWORD);
     console.error('Error sending email:', error);
     throw new Error('Failed to send email.');
   }
