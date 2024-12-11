@@ -30,13 +30,13 @@ export const updateProfile = async (req: Request, res: Response): Promise<any> =
     let user: IUser | null = await User.findByPk(userId);
     if (!user) return res.status(404).json({ message: 'User Not Found' });
 
-    const existingEmail = await User.findOne({ where: { email: email } });
-    if (existingEmail) return res.status(409).json({ error: 'Email is already in use' });
-
     let updatedFields: Partial<IUser> = {};
 
     if (email) {
       if (!currentPassword) return res.status(400).json({ error: 'Current password is required to update email' });
+
+      const existingEmail = await User.findOne({ where: { email: email } });
+      if (existingEmail) return res.status(409).json({ error: 'Email is already in use' });
 
       const isMatch = await bcrypt.compare(currentPassword, user.password as string);
       if (!isMatch) return res.status(400).json({ error: 'Current password is incorrect' });
