@@ -25,7 +25,7 @@ export const getMessages = async (
   res: Response
 ): Promise<any> => {
   const senderId = req.user?.id;
-  const { receiverId } = req.params;
+  const { id: receiverId } = req.params;
   try {
     if (!senderId || !receiverId) {
       return res.status(400).json({ error: 'Both user IDs must be provided' });
