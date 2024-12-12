@@ -32,6 +32,6 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
-app.use('/api/message', messageRoute);
+app.use('/api/chat', messageRoute);
 
 export default app;
