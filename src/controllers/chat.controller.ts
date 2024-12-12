@@ -8,7 +8,10 @@ import cloudinary from '../config/cloudinary.js';
 export const getUsers = async (req: Request, res: Response): Promise<any> => {
   const userId = req.user?.id;
   try {
-    const filteredUsers = await User.findAll({ where: { id: userId }, attributes: { exclude: ['password'] } });
+    const filteredUsers = await User.findAll({
+      where: { id: userId },
+      attributes: { exclude: ['password'] }
+    });
 
     res.status(200).json(filteredUsers);
   } catch (error: any) {
@@ -17,7 +20,10 @@ export const getUsers = async (req: Request, res: Response): Promise<any> => {
   }
 };
 
-export const getMessages = async (req: Request, res: Response): Promise<any> => {
+export const getMessages = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   const senderId = req.user?.id;
   const { receiverId } = req.params;
   try {
@@ -42,12 +48,19 @@ export const getMessages = async (req: Request, res: Response): Promise<any> => 
   }
 };
 
-export const sendMessage = async (req: Request, res: Response): Promise<any> => {
+export const sendMessage = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
   const senderId = req.user?.id;
-  const { receiverId, content } = req.body;
+  const { id: receiverId } = req.params;
+  const { content } = req.body;
 
   try {
-    if (!senderId || !receiverId || !content) return res.status(400).json({ error: 'Sender ID, receiver ID and content must be provided' });
+    if (!senderId || !receiverId || !content)
+      return res
+        .status(400)
+        .json({ error: 'Sender ID, receiver ID and content must be provided' });
 
     let imageUrl: string = '';
     if (content.image) {
