@@ -1,59 +1,29 @@
-import { DataTypes, Model } from 'sequelize';
-import { sequelize } from '../config/db.js';
+import mongoose from 'mongoose';
 
-class User extends Model {
-  declare id: string;
-  declare name: string;
-  declare email: string;
-  declare password: string;
-  declare profilePic?: string;
-  declare role?: string;
-  declare readonly createdAt: Date;
-  declare readonly updatedAt: Date;
-}
-
-User.init(
+const UserSchema = new mongoose.Schema(
   {
-    id: {
-      type: DataTypes.UUID,
-      primaryKey: true,
-      defaultValue: DataTypes.UUIDV4
-    },
     name: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: String,
+      required: true
     },
     email: {
-      type: DataTypes.STRING,
-      allowNull: false,
+      type: String,
+      required: true,
       unique: true
     },
     password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        len: [8, 255]
-      }
+      type: String,
+      required: true,
+      minlength: 8
     },
     profilePic: {
-      type: DataTypes.STRING,
-      defaultValue: ''
-    },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      defaultValue: 'user',
-      validate: {
-        isIn: [['user', 'admin']]
-      }
+      type: String,
+      default: ''
     }
   },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
-    timestamps: true
-  }
+  { timestamps: true }
 );
+
+const User = mongoose.model('User', UserSchema);
 
 export default User;

@@ -2,6 +2,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 
 import User from '../models/user.model.js';
+import { IUser } from '../types/user.type';
 
 export const authorization = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   try {
@@ -11,7 +12,7 @@ export const authorization = async (req: Request, res: Response, next: NextFunct
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload;
     if (!decoded) return res.status(401).json({ error: 'Unauthorized: Invalid token' });
 
-    const user = await User.findOne({ where: { id: decoded.id }, attributes: { exclude: ['password'] } });
+    const user: IUser | null = await User.findById({ _id: decoded._id }).select('-password');
     if (!user) return res.status(404).json({ error: 'Unauthorized: User Not Found' });
 
     req.user = user;

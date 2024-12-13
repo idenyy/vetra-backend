@@ -14,7 +14,7 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(email)) return res.status(400).json({ error: 'Invalid Email Format' });
 
-    const existingUser = await User.findOne({ where: { email } });
+    const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ error: 'User Already Exists' });
 
     if (password.length < 8) return res.status(400).json({ error: 'Password must be at least 8 characters' });
@@ -28,7 +28,9 @@ export const signup = async (req: Request, res: Response): Promise<any> => {
       verificationCode,
       verificationCodeExpiry: Date.now() + 10 * 60 * 1000
     };
-    const token = jwt.sign(signupData, process.env.JWT_AUTH!, { expiresIn: '10m' });
+    const token = jwt.sign(signupData, process.env.JWT_AUTH!, {
+      expiresIn: '10m'
+    });
 
     res.cookie('signupData', token, {
       httpOnly: true,
@@ -67,7 +69,7 @@ export const signupVerify = async (req: Request, res: Response): Promise<any> =>
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const user = await User.create({
+    const user = new User({
       name,
       email,
       password: hashedPassword
@@ -76,13 +78,17 @@ export const signupVerify = async (req: Request, res: Response): Promise<any> =>
     if (user) {
       res.clearCookie('signupData');
 
-      const token = generateToken(user.id, res);
-      const userResponse = user.toJSON();
-      delete userResponse.password;
+      const token = generateToken(user?._id, res);
+      await user.save();
 
       return res.status(201).json({
         token,
-        user: userResponse,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          profilePic: user.profilePic
+        },
         message: 'Signup Successfully'
       });
     }
@@ -98,7 +104,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
   try {
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ email: email });
     if (!user) return res.status(404).json({ error: 'User Not Found' });
 
     const isUserPasswordCorrect = await bcrypt.compare(password, user.password);
