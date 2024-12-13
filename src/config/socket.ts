@@ -1,6 +1,7 @@
 import { Server } from 'socket.io';
 import http from 'http';
 import express, { Application } from 'express';
+import Message from '../models/message.model';
 
 export const app: Application = express();
 export const server = http.createServer(app);
@@ -25,6 +26,22 @@ io.on('connection', (socket) => {
   if (userId) userSocketMap[userId] = socket.id;
 
   io.emit('getOnlineUsers', Object.keys(userSocketMap));
+
+  socket.on('markAsRead', (messageId: string) => {
+    Message.findByIdAndUpdate(messageId, { isRead: true }, { new: true })
+      .then((updatedMessage) => {
+        if (!updatedMessage) {
+          socket.emit('error', { message: 'Message not found' });
+          return;
+        }
+
+        io.emit('messageRead', messageId);
+      })
+      .catch((error: any) => {
+        socket.emit('error', { message: 'Failed to mark message as read' });
+        console.error(error);
+      });
+  });
 
   socket.on('disconnect', () => {
     console.log('User disconnected: ', socket.id);

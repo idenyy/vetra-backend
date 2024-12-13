@@ -71,3 +71,18 @@ export const sendMessage = async (req: Request, res: Response): Promise<any> => 
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+export const readMessage = async (req: Request, res: Response): Promise<any> => {
+  const { id: messageId } = req.params;
+
+  try {
+    const updatedMessage = await Message.findByIdAndUpdate(messageId, { isRead: true }, { new: true });
+
+    if (!updatedMessage) return res.status(404).json({ error: 'Message not found' });
+
+    res.status(200).json(updatedMessage);
+  } catch (error: any) {
+    console.error(`Error in [readMessage] controller: ${error.message}`);
+    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
