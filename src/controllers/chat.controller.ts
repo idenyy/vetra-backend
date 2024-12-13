@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import User from '../models/user.model.js';
 import Message from '../models/message.model.js';
 import cloudinary from '../config/cloudinary.js';
+import { io } from '../config/socket.js';
+import { getReceiverSocketId } from '../config/socket.js';
 
 export const getUsers = async (req: Request, res: Response): Promise<any> => {
   const userId = req.user?.id;
@@ -59,6 +61,9 @@ export const sendMessage = async (req: Request, res: Response): Promise<any> => 
     });
 
     await newMessage.save();
+
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) io.to(receiverSocketId).emit('newMessage', newMessage);
 
     res.status(201).json(newMessage);
   } catch (error: any) {
