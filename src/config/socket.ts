@@ -8,7 +8,7 @@ export const server = http.createServer(app);
 
 export const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://vetra-pi.vercel.app', 'https://vetra-deny-dev.vercel.app', 'https://vetra-ep3jct8gw-deny-dev.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://vetra-pi.vercel.app', 'https://vetra-deny-dev.vercel.app', 'https://vetra-psctoh42b-deny-dev.vercel.app/'],
     credentials: true
   }
 });
