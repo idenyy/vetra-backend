@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://vetra-pi.vercel.app'],
+    origin: ['http://localhost:5173', 'http://localhost:3000', 'https://vetra-pi.vercel.app', 'https://vetra-deny-dev.vercel.app', 'https://vetra-ep3jct8gw-deny-dev.vercel.app'],
     credentials: true
   })
 );
