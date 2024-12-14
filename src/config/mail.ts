@@ -99,7 +99,7 @@ export const sendMail = async (email: string, verificationCode: string) => {
               <p class="email-code__text">This code is only active for the next 10 minutes. Once the code expires you will have to resubmit a request for a code.</p>
             </div>
             <div class="email-footer">
-              &copy; ${new Date().getFullYear()} ${new Date().getFullYear()} LUXURY HOTEL. All rights reserved.
+              &copy; ${new Date().getFullYear()} ${new Date().getFullYear()} VETRA. All rights reserved.
             </div>
           </div>
         </body>
