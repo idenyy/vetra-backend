@@ -91,7 +91,7 @@ export const sendMail = async (email: string, verificationCode: string) => {
         </head>
         <body>
           <div class="email-container">
-            <h1 class="email-header"><img src="https://static.thenounproject.com/png/7745-200.png" alt="Logo"></h1>
+            <h1 class="email-header"></h1>
             <div class="email-body">
               <p>Hi there,</p>
               <p>This is your one time verification code.</p>
