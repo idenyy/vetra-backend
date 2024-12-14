@@ -27,20 +27,26 @@ io.on('connection', (socket) => {
 
   io.emit('getOnlineUsers', Object.keys(userSocketMap));
 
-  socket.on('markAsRead', (messageId: string) => {
-    Message.findByIdAndUpdate(messageId, { isRead: true }, { new: true })
-      .then((updatedMessage) => {
-        if (!updatedMessage) {
-          socket.emit('error', { message: 'Message not found' });
-          return;
-        }
+  socket.on('readMessage', async (data) => {
+    const { messageId, userId } = data;
 
-        io.emit('messageRead', messageId);
-      })
-      .catch((error: any) => {
-        socket.emit('error', { message: 'Failed to mark message as read' });
-        console.error(error);
-      });
+    try {
+      const message = await Message.findById(messageId);
+      if (message && message.receiverId === userId) {
+        message.isRead = true;
+        await message.save();
+
+        const senderSocketId = getReceiverSocketId(message.senderId.toString());
+        if (senderSocketId) {
+          io.to(senderSocketId).emit('messageRead', {
+            messageId,
+            recipientId: userId
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error marking message as read:', error);
+    }
   });
 
   socket.on('disconnect', () => {
